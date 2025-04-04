@@ -2,9 +2,22 @@ spring:
   cloud:
     function:
       # Function definition names
-      definition: eventListener
+      definition: eventProcessor;eventListener
     stream:
       bindings:
+        # Event processor input Spring Cloud Stream general binder definition
+        eventProcessor-in-0:
+          group: group-name
+          destination: event-input
+          consumer:
+            max-attempts: 1
+            batch-mode: true
+            use-native-decoding: true
+        # Event processor output Spring Cloud Stream general binder definition
+        eventProcessor-out-0:
+          destination: event-output
+          producer:
+            use-native-encoding: true
         # Event listener Spring Cloud Stream general binder definition
         eventListener-in-0:
           group: group-name
@@ -16,6 +29,17 @@ spring:
         binder:
           brokers: localhost:9092
         bindings:
+          # Event processor input Spring Cloud Stream binder specific definition
+          eventProcessor-in-0:
+            consumer:
+              configuration:
+                value.deserializer: org.springframework.kafka.support.serializer.JsonDeserializer
+                spring.json.trusted.packages: com.example.demo
+          # Event processor output Spring Cloud Stream binder specific definition
+          eventProcessor-out-0:
+            producer:
+              configuration:
+                value.serializer: org.springframework.kafka.support.serializer.JsonSerializer
           # Event listener Spring Cloud Stream binder specific definition
           eventListener-in-0:
             consumer:
