@@ -24,7 +24,13 @@ class EventProcessor implements Function<Message<List<Event>>, List<Message<Even
     public List<Message<Event>> apply(Message<List<Event>> message) {
         System.out.println("Processor event: Start");
 
-        message.getPayload().forEach(event -> System.out.println("Processor event: " + event));
+        message.getPayload().forEach(event -> {
+            if (event.message().contains("w")) {
+                throw new RuntimeException();
+            }
+
+            System.out.println("Processor event: " + event);
+        });
 
         System.out.println("Processor event: End");
 

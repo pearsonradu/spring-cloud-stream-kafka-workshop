@@ -35,6 +35,14 @@ spring:
               configuration:
                 value.deserializer: org.springframework.kafka.support.serializer.JsonDeserializer
                 spring.json.trusted.packages: com.example.demo
+              # Event processor Spring Cloud Stream Kafka DLQ configuration
+              # https://docs.spring.io/spring-cloud-stream/docs/3.2.x/reference/html/spring-cloud-stream-binder-kafka.html#_simple_dlq_with_kafka
+              enable-dlq: true
+              dlq-name: event-dlq
+              dlq-producer-properties:
+                configuration:
+                  key.serializer: org.apache.kafka.common.serialization.ByteArraySerializer
+                  value.serializer: org.springframework.kafka.support.serializer.JsonSerializer
           # Event processor output Spring Cloud Stream binder specific definition
           eventProcessor-out-0:
             producer:
