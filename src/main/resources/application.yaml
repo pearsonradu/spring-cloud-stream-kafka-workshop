@@ -40,7 +40,10 @@ spring:
           eventProcessor-in-0:
             consumer:
               configuration:
-                value.deserializer: org.springframework.kafka.support.serializer.JsonDeserializer
+                # Event processor error handling deserializer
+                # https://docs.spring.io/spring-cloud-stream/docs/3.2.x/reference/html/spring-cloud-stream-binder-kafka.html#_handling_deserialization_errors_with_dlq
+                value.deserializer: org.springframework.kafka.support.serializer.ErrorHandlingDeserializer
+                spring.deserializer.value.delegate.class: org.springframework.kafka.support.serializer.JsonDeserializer
                 spring.json.trusted.packages: com.example.demo
               # Event processor Spring Cloud Stream Kafka DLQ configuration
               # https://docs.spring.io/spring-cloud-stream/docs/3.2.x/reference/html/spring-cloud-stream-binder-kafka.html#_simple_dlq_with_kafka
