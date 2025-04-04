@@ -1,0 +1,24 @@
+spring:
+  cloud:
+    function:
+      # Function definition names
+      definition: eventListener
+    stream:
+      bindings:
+        # Event listener Spring Cloud Stream general binder definition
+        eventListener-in-0:
+          group: group-name
+          destination: event-output
+          consumer:
+            max-attempts: 1
+            use-native-decoding: true
+      kafka:
+        binder:
+          brokers: localhost:9092
+        bindings:
+          # Event listener Spring Cloud Stream binder specific definition
+          eventListener-in-0:
+            consumer:
+              configuration:
+                value.deserializer: org.springframework.kafka.support.serializer.JsonDeserializer
+                spring.json.trusted.packages: com.example.demo
