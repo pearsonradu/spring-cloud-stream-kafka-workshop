@@ -20,4 +20,10 @@ class StreamConfiguration {
     Consumer<Event> eventListener() {
         return new EventListener();
     }
+
+    @Bean
+    Consumer<Event> dlqEventListener() {
+        return new DlqEventListener();
+    }
+
 }

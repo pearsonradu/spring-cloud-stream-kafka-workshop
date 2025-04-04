@@ -2,7 +2,7 @@ spring:
   cloud:
     function:
       # Function definition names
-      definition: eventProcessor;eventListener
+      definition: eventProcessor;eventListener;dlqEventListener
     stream:
       bindings:
         # Event processor input Spring Cloud Stream general binder definition
@@ -22,6 +22,13 @@ spring:
         eventListener-in-0:
           group: group-name
           destination: event-output
+          consumer:
+            max-attempts: 1
+            use-native-decoding: true
+        # DLQ event listener Spring Cloud Stream general binder definition
+        dlqEventListener-in-0:
+          group: group-name
+          destination: event-dlq
           consumer:
             max-attempts: 1
             use-native-decoding: true
@@ -50,6 +57,12 @@ spring:
                 value.serializer: org.springframework.kafka.support.serializer.JsonSerializer
           # Event listener Spring Cloud Stream binder specific definition
           eventListener-in-0:
+            consumer:
+              configuration:
+                value.deserializer: org.springframework.kafka.support.serializer.JsonDeserializer
+                spring.json.trusted.packages: com.example.demo
+          # DLQ event listener Spring Cloud Stream binder specific definition
+          dlqEventListener-in-0:
             consumer:
               configuration:
                 value.deserializer: org.springframework.kafka.support.serializer.JsonDeserializer
